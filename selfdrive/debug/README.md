@@ -1,5 +1,26 @@
 # debug scripts
 
+## [standalone_can.py](standalone_can.py)
+
+Standalone CAN bus / UDS tool. Talks to the bus directly (panda, socketcan, or an
+in-memory mock) using opendbc's `UdsClient` / `CANPacker` - no openpilot daemon stack
+required. Includes a fake UDS ECU so the full request/response ISO-TP loop can be
+tested with no hardware.
+
+```
+usage: standalone_can.py {selftest,uds,raw,pack}
+
+  selftest    full UDS session against the built-in fake ECU (no hardware needed)
+  uds         UDS (ISO 14229) requests over ISO-TP, via opendbc UdsClient
+  raw         send raw CAN frame(s) directly
+  pack        pack a DBC-defined message with opendbc CANPacker and send it
+
+./selfdrive/debug/standalone_can.py selftest
+./selfdrive/debug/standalone_can.py uds 0x7df --req "10 03" --req "22 f190" --bus 1
+./selfdrive/debug/standalone_can.py raw 0x18db33f1:1003 --listen 2
+./selfdrive/debug/standalone_can.py pack toyota_nodsu_pt_generated --msg LTA_RELATED --sig STEER_ANGLE=10
+```
+
 ## [can_printer.py](can_printer.py)
 
 ```
